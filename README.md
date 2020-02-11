@@ -1,4 +1,5 @@
 # Alurapic
+This project was created in a course of Alura, to learn about Angular 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.7.
 
