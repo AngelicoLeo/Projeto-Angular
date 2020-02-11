@@ -4,7 +4,11 @@ import { Injectable } from '@angular/core';
 import { Photo } from "./photo";
 import { PhotoComment } from './photo-comment';
 
-const API = 'http://localhost:3000';
+import { environment } from '../../../environments/environment';
+import { map, catchError } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
+
+const API = environment.ApiUrl;
 
 @Injectable({ providedIn: 'root' })
 export class PhotoService {
@@ -31,7 +35,14 @@ export class PhotoService {
         formData.append('allowComments', allowComments ? 'true' : 'false');
         formData.append('imageFile', file);
 
-        return this.http.post(API + '/photos/upload', formData);
+        return this.http.post(
+            API + '/photos/upload', 
+            formData,
+            { 
+                observe: 'events',
+                reportProgress: true
+            }
+        );
 
     }
 
@@ -52,5 +63,20 @@ export class PhotoService {
             API + '/photos/' + photoId + '/comments',
             { commentText }
         );        
+    }
+
+    removePhoto(photoId: number) {
+        return this.http.delete(API + '/photos/' + photoId);
+    }
+
+    like(photoId: number) {
+
+        return this.http.post(
+            API + '/photos/' + photoId + '/like', {}, { observe: 'response'}
+        )
+        .pipe(map(res => true))
+        .pipe(catchError(err => {
+            return err.status == '304' ? of(false) : throwError(err);
+        }));
     }
 }
