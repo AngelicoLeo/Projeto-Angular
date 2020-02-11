@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './photo-form.component.html',
   styleUrls: ['./photo-form.component.css']
 })
-export class PhotosFormComponent implements OnInit {
+export class PhotoFormComponent implements OnInit {
 
   constructor() { }
 
