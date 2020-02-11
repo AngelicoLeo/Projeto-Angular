@@ -8,7 +8,7 @@ import { HttpHeaderResponse } from "@angular/common/http";
 import { HttpProgressEvent } from "@angular/common/http";
 import { HttpResponse } from "@angular/common/http";
 import { HttpUserEvent } from "@angular/common/http";
-import { tap } from "rxjs/operators";
+import { tap, catchError } from "rxjs/operators";
 
 import { LoadingService } from "./loading.service";
 
@@ -33,5 +33,9 @@ export class LoadingInterceptor implements HttpInterceptor{
                         this.loadingService.start();
                     }
                 }))
+                .pipe(catchError(err => {
+                    this.loadingService.stop();
+                    throw err;
+                }));
     }
 }
